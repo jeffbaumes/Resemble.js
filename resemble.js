@@ -66,7 +66,7 @@ URL: https://github.com/Huddle/Resemble.js
 	var errorPixelTransformer = errorPixelTransform.flat;
 
 	var largeImageThreshold = 1200;
-	
+
 	var httpRegex = /^https?:\/\//;
 	var document = typeof window != "undefined" ? window.document : {};
 	var documentDomainRegex = new RegExp('^https?://' + document.domain);
@@ -148,21 +148,21 @@ URL: https://github.com/Huddle/Resemble.js
 		function loadImageData( fileData, callback ){
 			var fileReader;
 			var hiddenImage = new Image();
-			
-			if (!(typeof fileData === 'string' 
-				&& fileData.length > 6 
-				&& fileData.charAt(4)===':' 
+
+			if (!(typeof fileData === 'string'
+				&& fileData.length > 6
+				&& fileData.charAt(4)===':'
 				&& fileData.charAt(5)!=='/'
 			)) {
 				if (httpRegex.test(fileData) && !documentDomainRegex.test(fileData)) {
 					hiddenImage.setAttribute('crossorigin', 'anonymous');
 				}
 			}
-			
-			hiddenImage.onerror = function () { 
+
+			hiddenImage.onerror = function () {
 				hiddenImage.onerror = null; //fixes pollution between calls
 				images.push({ error : "Image load error."});
-				callback(); 
+				callback();
 			};
 
 			hiddenImage.onload = function() {
@@ -603,6 +603,14 @@ URL: https://github.com/Huddle/Resemble.js
 				},
 				useOriginalSize: function(){
 					scaleToSameSize = false;
+
+					if(hasMethod) { param(); }
+					return self;
+				},
+				setTolerance: function(threshold){
+					for(var key in threshold){
+						tolerance[key] = (+threshold[key] >= 0 && +threshold[key] <= 255) ? threshold[key] : tolerance[key];
+					}
 
 					if(hasMethod) { param(); }
 					return self;
